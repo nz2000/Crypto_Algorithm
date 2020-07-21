@@ -1,3 +1,2 @@
-In the repositories thus far, I have been able to complete the code individually before commiting the final version onto Github at the end, this is largely due to the smaller learning curve that those projects possessed, which allowed me to focus more upon the fundamentals.
-
-However this project wont be submitted just once after completion, rather I will be submitting it in parts as I work towards the end product. 
+This repository contains the python code for the common cryptographic algorithm called 'Caesar Cipher'.
+It can both encrypt as well as decrypt any data inputed within it. 

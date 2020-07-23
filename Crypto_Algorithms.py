@@ -17,10 +17,7 @@ def encryption(textblock,shiftvalue,inputstate):
             caesarcipher()
         else:
             sys.exit()
-        
-        
-            
-        
+
 def decryption(textblock,shiftvalue,inputstate):
     n = 1
     while n != 0:
@@ -38,48 +35,32 @@ def decryption(textblock,shiftvalue,inputstate):
             caesarcipher(i)
         else:
             sys.exit()
-    
-    
 
 def caesarcipher():
     inputstate = input("Please enter encryption or decryption, depending on your intent:")
-
     textblock = input("Please enter the text block you would like to encrypt/decrypt: ")
-
     shiftvalue = int(input("Please enter the numerical value of the shift you would like to perform (This value must be a number): "))
-
-
     if (inputstate == 'encryption'):
-
         encryption(textblock,shiftvalue,inputstate)
-        
     elif (inputstate == 'decryption'):
-
         decryption(textblock,shiftvalue,inputstate)
-
 
 def encrypt(ciphercode, key,alphabet,indexvalue,charactervalue):
     encrypted = ""
     split_ciphercode = [
-        ciphercode[i : i + len(key)] for i in range(0, len(ciphercode), len(key))
-    ]
-
+        ciphercode[i : i + len(key)] for i in range(0, len(ciphercode), len(key))]
     for each_split in split_ciphercode:
         i = 0
         for letter in each_split:
             number = (indexvalue[letter] + indexvalue[key[i]]) % len(alphabet)
             encrypted += charactervalue[number]
             i += 1
-
     return encrypted
-
 
 def decrypt(cipher, key,alphabet,indexvalue,charactervalue):
     decrypted = ""
     split_encrypted = [
-        cipher[i : i + len(key)] for i in range(0, len(cipher), len(key))
-    ]
-
+        cipher[i : i + len(key)] for i in range(0, len(cipher), len(key))]
     for each_split in split_encrypted:
         i = 0
         for letter in each_split:
@@ -89,9 +70,7 @@ def decrypt(cipher, key,alphabet,indexvalue,charactervalue):
 
     return decrypted
 
-
 def Vigenere(alphabet,indexvalue,charactervalue,ciphercode,key,inputvalue):
-
     if inputvalue == 1:
         encrypted_ciphercode = encrypt(ciphercode, key,alphabet,indexvalue,charactervalue)
         print("Original ciphercode: " + ciphercode)
@@ -121,9 +100,7 @@ def VigenereCipher():
     Vigenere(alphabet,indexvalue,charactervalue,ciphercode,key,inputvalue)
 
 def main():
-
     entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nPlease enter your selection here:"))
-    
     if entryvalue == 1:
         caesarcipher()
     elif entryvalue == 2:

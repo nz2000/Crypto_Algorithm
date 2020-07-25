@@ -1,4 +1,4 @@
-import sys
+import sys,random,string
 
 def encryption(textblock,shiftvalue,inputstate):
     n = 1
@@ -99,11 +99,81 @@ def VigenereCipher():
     inputvalue = int(input("Please enter 1 if you would like to encrypt the above ciphercode, for decrypting the above text please enter 2.\nPlease enter your option:"))
     Vigenere(alphabet,indexvalue,charactervalue,ciphercode,key,inputvalue)
 
+def xor(s1, s2):
+    xor_result = []
+    for i in range(min(len(s1), len(s2))):
+        xor_result.append(int(s1[i]) ^ int(s2[i]))  
+    return xor_result
+
+def encryptV(message, key):
+    binary_message = ""
+    binary_key = ""
+    ciphered_text = ""
+
+    for letter in message:
+        binary_message += format(ord(letter), "b")
+
+    for letter in key:
+        binary_key += format(ord(letter), "b")
+
+    cipher_binary = xor(binary_message, binary_key)
+
+    return "".join(str(e) for e in cipher_binary)
+
+def decryptV(cipher_text, key):
+    binary_key = ""
+    decrypted_text = ""
+
+    for letter in key:
+        binary_key += format(ord(letter), "b")
+
+    binary_message = xor(cipher_text, binary_key)
+
+    for i in range(0, len(binary_message), 7):
+        letter = "".join(str(e) for e in binary_message[i : i + 7])
+        decrypted_text += chr(int(letter, 2))
+
+    return decrypted_text
+
+def VernamCipher(message,key):
+    inputstatus = int(input("If you would like to perform Encryption type 1, else type 2: "))
+    encrypted = encryptV(message, key)
+    decrypted = decryptV(encrypted, key)
+    if inputstatus == 1:
+        print("Original message: " + str(message))
+        print("The key used was: " + key)
+        print("Encrypted message (in binary): " + str(encrypted))
+        return_value = int(input("Please enter 0 to quit this program, else enter 1: "))
+        if return_value != 0:
+            Vernam()
+        else:
+            sys.exit()
+    else:
+        print("Original message: " + str(message))
+        print("The key used was: " + key)
+        print("Decrypted message: " + str(decrypted))
+        return_value = int(input("Please enter 0 to quit this program, else enter 1: "))
+        if return_value != 0:
+            Vernam()
+        else:
+            sys.exit()
+
+def Vernam():
+    message = input("plz input the message:")
+    choice = int(input("Do you have your own key, if yes type 1, else type 2:"))
+    if choice == 1:
+        key = input("Please enter your given key:")
+    else:
+        key = "".join(random.choice(string.ascii_letters) for i in range(len(message)))
+    VernamCipher(message,key)
+
 def main():
-    entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nPlease enter your selection here:"))
+    entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nVernam Cipher: 3\nPlease enter your selection here:"))
     if entryvalue == 1:
         caesarcipher()
     elif entryvalue == 2:
         VigenereCipher()
+    elif entryvalue == 3:
+        Vernam()
 
 main()

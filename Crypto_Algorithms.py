@@ -1,4 +1,6 @@
 import sys,random,string
+import numpy as np
+from sympy import Matrix
 
 def encryption(textblock,shiftvalue,inputstate):
     n = 1
@@ -167,13 +169,96 @@ def Vernam():
         key = "".join(random.choice(string.ascii_letters) for i in range(len(message)))
     VernamCipher(message,key)
 
+def getKeyMatrix(key):
+    k = 0
+    for i in range(3):
+        for j in range(3):
+            np.keyMatrix[i][j] = ord(key[k]) % 65
+            k += 1
+
+def encrypthill(messageVector,cipherMatrix):
+    for i in range(3):
+        for j in range(1):
+            cipherMatrix[i][j] = 0
+        for x in range(3):
+            cipherMatrix[i][j] += (np.keyMatrix[i][x] * messageVector[x][j])
+            cipherMatrix[i][j] = cipherMatrix[i][j] % 26
+
+def HillCipher1(messageVector,cipherMatrix):
+    message = input("Enter 3 no. of string: ")
+    message = message.upper()
+    key = input("Enter the Key:")
+    key = key.upper()
+    getKeyMatrix(key)
+    for i in range(3):
+        messageVector[i][0] = ord(message[i]) % 65
+    encrypthill(messageVector,cipherMatrix)
+    CipherText = []
+    for i in range(3):
+        CipherText.append(chr(cipherMatrix[i][0] + 65))
+    print("Ciphertext: ", "".join(CipherText))
+    inputvariable = int(input("To restart this program please enter 1, to end this program enter 0: "))
+    if inputvariable == 0:
+        sys.exit()
+    else:
+        Hill()
+
+def getInverseKeyMatrix(key):
+    getKeyMatrix(key)
+    keyMatrix=np.keyMatrix
+    
+    inverseKeyMatrix = Matrix(keyMatrix).inv_mod(26)
+    np.inverseKeyMatrix = np.array(inverseKeyMatrix)
+
+def HillCipher2(plainMatrix, messageVector):
+    message = input("Enter 3 no. of string: ")
+    message = message.upper()
+    key = input("Enter the Key:")
+    key = key.upper()
+    getInverseKeyMatrix(key)
+    for i in range(3):
+        messageVector[i][0] = ord(message[i]) % 65
+    decrypthill(messageVector,plainMatrix)
+    PlainText = []
+    for i in range(3):
+        PlainText.append(chr(int(round(plainMatrix[i][0]) + 65)))
+    print("Plaintext: ", "".join(PlainText))
+    inputvariable = int(input("To restart this program please enter 1, to end this program enter 0: "))
+    if inputvariable == 0:
+        sys.exit()
+    else:
+        Hill()
+
+def decrypthill(messageVector,plainMatrix):
+    for i in range(3):
+        for j in range(1):
+            plainMatrix[i][j] = 0
+        for x in range(3):
+            plainMatrix[i][j] = plainMatrix[i][j] % 26
+            plainMatrix[i][j] += (np.inverseKeyMatrix[i][x] * messageVector[x][j])
+        plainMatrix[i][j] = plainMatrix[i][j] % 26
+
+def Hill():
+    np.keyMatrix = [[0] * 3 for i in range(3)]
+    messageVector = [[0] for i in range(3)]
+    cipherMatrix = [[0] for i in range(3)]
+    plainMatrix = [[0] for i in range(3)]
+    np.inverseKeyMatrix = [[0] * 3 for i in range(3)]
+    ch=int(input("For Encryption enter 1, for Decryption enter 2: "))
+    if ch == 1:
+        HillCipher1(messageVector,cipherMatrix)
+    elif ch == 2:
+        HillCipher2(plainMatrix, messageVector)
+
 def main():
-    entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nVernam Cipher: 3\nPlease enter your selection here:"))
+    entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nVernam Cipher: 3\nHill Cipher: 4\nPlease enter your selection here:"))
     if entryvalue == 1:
         caesarcipher()
     elif entryvalue == 2:
         VigenereCipher()
     elif entryvalue == 3:
         Vernam()
+    elif entryvalue == 4:
+        Hill()
 
 main()

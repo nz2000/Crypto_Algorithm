@@ -249,9 +249,89 @@ def Hill():
         HillCipher1(messageVector,cipherMatrix)
     elif ch == 2:
         HillCipher2(plainMatrix, messageVector)
+def encryptRailFence(text, key): 
+    rail = [['\n' for i in range(len(text))] 
+                  for j in range(key)] 
+    dir_down = False
+    row, col = 0, 0
+    for i in range(len(text)): 
+        if (row == 0) or (row == key - 1): 
+            dir_down = not dir_down 
+        rail[row][col] = text[i] 
+        col += 1
+        if dir_down: 
+            row += 1
+        else: 
+            row -= 1
+    result = [] 
+    for i in range(key): 
+        for j in range(len(text)): 
+            if rail[i][j] != '\n': 
+                result.append(rail[i][j]) 
+    print(("" . join(result)))
+    inputvariable = int(input("To restart this program please enter 1, to end this program enter 0: "))
+    if inputvariable == 0:
+        sys.exit()
+    else:
+        RailFence()
+      
+def decryptRailFence(cipher, key): 
+    rail = [['\n' for i in range(len(cipher))]  
+                  for j in range(key)] 
+    dir_down = None
+    row, col = 0, 0
+    for i in range(len(cipher)): 
+        if row == 0: 
+            dir_down = True
+        if row == key - 1: 
+            dir_down = False
+        rail[row][col] = '*'
+        col += 1
+        if dir_down: 
+            row += 1
+        else: 
+            row -= 1
+    index = 0
+    for i in range(key): 
+        for j in range(len(cipher)): 
+            if ((rail[i][j] == '*') and
+               (index < len(cipher))): 
+                rail[i][j] = cipher[index] 
+                index += 1
+    result = [] 
+    row, col = 0, 0
+    for i in range(len(cipher)): 
+        if row == 0: 
+            dir_down = True
+        if row == key-1: 
+            dir_down = False
+        if (rail[row][col] != '*'): 
+            result.append(rail[row][col]) 
+            col += 1
+        if dir_down: 
+            row += 1
+        else: 
+            row -= 1
+    print(("".join(result)))
+    inputvariable = int(input("To restart this program please enter 1, to end this program enter 0: "))
+    if inputvariable == 0:
+        sys.exit()
+    else:
+        RailFence()
+  
+def RailFence():
+    inputrailvalue = int(input("Please enter 1 for encrytpion or 2 for decryption: "))
+    if inputrailvalue == 1:
+        message = input("Please enter the text you want encrypted: ")
+        key = int(input("Please enter the numerical value of the key: "))
+        encryptRailFence(message, key)
+    else:
+        message = input("Please enter the text you want decrypted: ")
+        key = int(input("Please enter the numerical value of the key: "))
+        decryptRailFence(message, key)
 
 def main():
-    entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nVernam Cipher: 3\nHill Cipher: 4\nPlease enter your selection here:"))
+    entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nVernam Cipher: 3\nHill Cipher: 4\nRail Fence Cipher: 5\nPlease enter your selection here:"))
     if entryvalue == 1:
         caesarcipher()
     elif entryvalue == 2:
@@ -260,5 +340,7 @@ def main():
         Vernam()
     elif entryvalue == 4:
         Hill()
+    elif entryvalue == 5:
+        RailFence()
 
 main()

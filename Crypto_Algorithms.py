@@ -1,6 +1,13 @@
+'''
+Author: Noel Zacharia
+Objective: To create a program that can encrypt and decrypt data based upon several ciphers
+'''
+
 import sys,random,string
 import numpy as np
 from sympy import Matrix
+
+#Code for the Caesar Cipher:
 
 def encryption(textblock,shiftvalue,inputstate):
     n = 1
@@ -46,6 +53,8 @@ def caesarcipher():
         encryption(textblock,shiftvalue,inputstate)
     elif (inputstate == 'decryption'):
         decryption(textblock,shiftvalue,inputstate)
+
+#Code for the Vigenere Cipher:
 
 def encrypt(ciphercode, key,alphabet,indexvalue,charactervalue):
     encrypted = ""
@@ -100,6 +109,8 @@ def VigenereCipher():
     key = input("Please enter the key for this algorithm:")
     inputvalue = int(input("Please enter 1 if you would like to encrypt the above ciphercode, for decrypting the above text please enter 2.\nPlease enter your option:"))
     Vigenere(alphabet,indexvalue,charactervalue,ciphercode,key,inputvalue)
+
+#Code for the Vernam Cipher:
 
 def xor(s1, s2):
     xor_result = []
@@ -168,6 +179,8 @@ def Vernam():
     else:
         key = "".join(random.choice(string.ascii_letters) for i in range(len(message)))
     VernamCipher(message,key)
+
+#Code for the Hill Cipher:
 
 def getKeyMatrix(key):
     k = 0
@@ -249,6 +262,9 @@ def Hill():
         HillCipher1(messageVector,cipherMatrix)
     elif ch == 2:
         HillCipher2(plainMatrix, messageVector)
+
+#Code for the Rail Fence Cipher:
+
 def encryptRailFence(text, key): 
     rail = [['\n' for i in range(len(text))] 
                   for j in range(key)] 
@@ -329,6 +345,8 @@ def RailFence():
         message = input("Please enter the text you want decrypted: ")
         key = int(input("Please enter the numerical value of the key: "))
         decryptRailFence(message, key)
+
+#Main function:
 
 def main():
     entryvalue = int(input("Welcome to the Unified Cryptographic Algorithm Program.\nPlease enter the numerical value associated with each algorithm depending on which algorithm you wish to use.\nCaesar Cipher: 1\nVigenere Cipher: 2\nVernam Cipher: 3\nHill Cipher: 4\nRail Fence Cipher: 5\nPlease enter your selection here:"))
